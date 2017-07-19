@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Insert title here</title>
+    </head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <body>
+        <form method="get">
+            <table>
+                 <tr>
+    			 	<td><input type="text" placeholder="Voer datum in" id="Datum" name="Datum" />  </td>
+    			 </tr>
+    			
+			 <tr>
+ 			 <td> <input type="button" id="Zoek" value="Zoek!" /></td>
+ 			 </tr>
+                    <div id="data"></div>
+                </tr>
+            </table>
+        </form>
+    </body>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var val = "";
+            $("#Zoek").click(function(event){
+                event.preventDefault();
+
+                $.ajax({
+                    type: "GET",
+                    dataType:"json",
+                    
+                    url:  "/firstapp/restservices/reserveringen/",
+                    success: function(data) {
+                        console.log("response:" + data);
+                        if ( $("#Datum").val()==pdata.Datum){
+                        $.each(data, function(j, pdata) {
+                            val= val + "Reservering nummer : "+ pdata.Reserveringnummer +"|	 Datum: " + pdata.Datum + "|	Met Aantal personen: " +pdata.AantalPeronen +"|	Opmerkingen: "+ pdata.Opmerkingen+  "|	klant emailaddress: "+ pdata.Fk_klant+ "|	tafelnummer: "+ pdata.Fk_tafel+"<br>";
+                        }
+                        });
+                        $("#data").html(val);
+                        
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(' Error in processing! '+textStatus);
+                    }
+                });
+            });
+        });
+    </script>
+</html>
+
+
+
